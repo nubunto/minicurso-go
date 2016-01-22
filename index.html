@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="reveal.js/css/reveal.css">
+	<link rel="stylesheet" href="reveal.js/css/theme/black.css" id="theme">
+
+	<!-- Code syntax highlighting -->
+	<link rel="stylesheet" href="reveal.js/lib/css/zenburn.css">
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            <section>
+                <h1>Go!</h1>
+                <img src="gopher.png">
+            </section>
+            <section data-markdown>
+                <script type="text/template">
+                    Go é uma linguagem de programação de **tipagem estática**, **compilada** e **concorrente**.
+                    Foi desenvolvida pelo Google e liberada ao mundo open source em 2007.
+                    Desde então, mantém uma alta aceitação por parte dos programadores ao redor do mundo.
+                </script>
+            </section>
+            <section>
+                    <h2>Quem usa Go?</h2>
+                    <span class="fragment">Google<span>
+                    <span class="fragment">YouTube<span>
+                    <span class="fragment">Docker<span>
+                    <span class="fragment">Globo.com<span>
+                    <span class="fragment">BBC Worldwide<span>
+                    <span class="fragment">Bitbucket<span>
+                    <span class="fragment">Bit.ly<span>
+                    <span class="fragment">Canonical<span>
+                    <span class="fragment">Digital Ocean<span>
+                    <span class="fragment">eBay<span>
+                    <span class="fragment">Facebook<span>
+                    <span class="fragment">GitHub<span>
+                    <span class="fragment">Heroku<span>
+                    <span class="fragment">MongoDB<span>
+                    <span class="fragment">Netflix<span>
+                    <span class="fragment">SendGrid<span>
+                    <span class="fragment">SoundCloud<span>
+                    <span class="fragment">SpaceX<span>
+                    <span class="fragment">StackExchange<span>
+                    <span class="fragment">Twitter<span>
+                    <span class="fragment">Hotel Urbano<span>
+                    <span class="fragment">Badoo<span>
+                    <span class="fragment">A China<span>
+                    <span class="fragment">... <a href="http://github.com/golang/go/wiki/GoUsers">e a lista continua.</a><span>
+            </section>
+            <section>
+            </section>
+            <section>
+                <section>
+                    <h2>Ferramentas</h2>
+                </section>
+                <section>
+                    <h3>go fmt</h3>
+                    Formata todo o código de um pacote com as convenções da linguagem.
+                    Não há brigas sobre espaços + tabs, tabs com tamanho 2 ou 4, e etc.
+                </section>
+                <section>
+                    <h3>go doc</h3>
+                    Pesquisa rápida de documentação, sem necessidade de internet.
+                </section>
+                <section>
+                    <h3>go build</h3>
+                    Compila código Go para um executável.
+                    Aliás, Go suporta cross compilation. Desenvolva e compile para qualquer arquitetura/SO suportada.
+                    ARM 32 bits, Linux/Mac 32 e 64 bits, Windows 32 e 64 bits, FreeBSD, etc.
+                </section>
+                <section>
+                    E alguns outros: go tour, go lint, go vet, go imports, etc.
+                </section>
+            </section>
+            <section>
+                <h2>Código Go, como se parece?</h2>
+                <pre><code class="hljs golang" data-trim>
+package main
+
+import "fmt"
+
+func main() {
+    fmt.Println("Hello, from Go!")
+}
+                </code></pre>
+
+            </section>
+            <section>
+                <h2>O quão difícil é desenvolver para a web?</h2>
+                <pre><code>
+package main
+
+import (
+    "fmt"
+    "net/http"
+)
+
+func main() {
+    // registra um código que roda ao ser feito um request na raiz ("/")
+    http.HandleFunc("/", meuHandler)
+    http.ListenAndServe(":8080", nil)
+}
+
+// a função recebe como parametro um ResponseWriter (que é usado para escrever na resposta para o cliente)
+// e um ponteiro (sim, um ponteiro) para um Request (que é usado para se obter informações sobre quem se conectou)
+// a função Fprintf (sim, igual a de C) escreve em um Writer (no caso, ResponseWriter) a string "Olá, mundo!"
+func meuHandler(w http.ResponseWriter, r *http.Request) {
+    fmt.Fprintf(w, "Olá, mundo!")
+}
+                </code></pre>
+                Aponte um browser para <strong>http://localhost:8080</strong> e veja a mensagem "Olá, mundo!"
+            </section>
+            <section>
+                <h2>Mas, cadê o IIS?</h2>
+                <p>(:</p>
+                Fora da caixa, a performance de Go é invejável: 10 mil conexões concorrentes em um servidor modesto.
+                <strong>E sem um XML à vista.</strong>
+
+                Não acredita? <a href="https://www.packtpub.com/books/content/c10k-%E2%80%93-non-blocking-web-server-go">Veja você mesmo.</a>
+            </section>
+            <section>
+                <h2>Deploy de programas Go</h2>
+                Ao rodar o comando "go build", é compilado um binário estático. Todas as dependências são enfiadas
+                em um único arquivo.
+                Deixe este arquivo no servidor, e está feito o deploy.
+                Rollback?
+                Volte a versão antiga do binário. Sempre faça backup.
+            </section>
+            <section>
+                <h2>Se aprofundando na linguagem</h2>
+            </section>
+            <section>
+                <section>
+                    <h2>Pacotes</h2>
+                    <pre><code>
+    package main
+                    </code></pre>
+                    para executáveis, ou
+                    <pre><code>
+    package qualquercoisa
+                    </code></pre>
+                    para libraries.
+                    <aside class="notes">
+                        Explicar as diferenças entre "package main" e "package foo"
+                    </aside>
+                </section>
+                <section>
+                    <h2>Pacotes</h2>
+                    Caso o programa esteja no pacote "main", uma função "main" deverá existir.
+                    <pre><code>
+package main
+
+func main() {
+    // função que roda ao se executar o binário
+}
+                    </code></pre>
+                </section>
+            </section>
+            <section>
+                <h2>Imports</h2>
+                Usando a palavra chave "import", conseguimos importar pacotes:
+                <pre><code>
+package main
+
+import (
+    "fmt" // pacote da distribuição padrão
+)
+                </code></pre>
+            </section>
+            <section>
+                <h2>Nomes exportados</h2>
+                Dentro de um pacote, nomes que começam com a letra maiúscula são exportados.
+
+                Nomes que começam com letra minúscula são privados.
+                <pre><code>
+// foo/foo.go
+package foo
+
+var AInteger int = 1
+var anotherInteger int = 2
+
+// main.go
+package main
+
+import (
+    "meupacote/foo"
+    "fmt"
+)
+
+func main() {
+    fmt.Println(foo.AInteger) // "1"
+    fmt.Println(foo.anotherInteger) // erro
+}
+                </code></pre>
+            </section>
+            <section>
+                <section>
+                    <h2>Declaração de tipos</h2>
+                    O tipo vem depois do nome:
+                    <pre><code>
+var a int
+var b string
+a = 1
+b = "2"
+
+var c float64 = 5.4
+var numeroComplexoOdiadoNoEnsinoMedio complex128 = 2 + 5i // sim, números complexos nativos!
+
+// pra funções também
+func Soma(a int, b int) int {
+    return a + b
+}
+                    </code></pre>
+                </section>
+                <section>
+                    <h2>Variáveis</h2>
+                    Variáveis podem ser declaradas com seu valor zerado (inicialização e declaração são a mesma coisa):
+                    <pre><code>
+var a int
+fmt.Println(a) // 0
+                    </code></pre>
+                </section>
+                <section>
+                    <h2>Variáveis</h2>
+                    Variáveis podem ter seu tipo inferido pelo compilador:
+                    <pre><code>
+var a = 1
+fmt.Println(a) // 1
+                    </code></pre>
+                </section>
+                <section>
+                    <h2>Variáveis</h2>
+                    Variáveis podem ser declaradas e setadas de forma concisa:
+                    <pre><code>
+a, b := "foobar", 2
+fmt.Println(a, b) // foobar 2
+                    </code></pre>
+                </section>
+            </section>
+            <section>
+                <section>
+                    <h2>Controles de fluxo</h2>
+                    If, For, Defer
+                </section>
+                <section>
+                    <h2>If</h2>
+                    Parecido com o If de C/Java/C#/JavaScript, mas não existem parênteses:
+                    <pre><code>
+if b &gt;= 1 {
+    a = b - 5
+} else if b &lt; 0 {
+    a = b + 10
+}
+                    </code></pre>
+                </section>
+                <section>
+                    <h2>If</h2>
+                    O If pode ter um inicializador antes de ser executado:
+                    <pre><code>
+if _, erro := arquivo.Read(conteudo); erro != nil {
+    fmt.Println("Erro ao ler arquivo:", erro)
+}
+                    </code></pre>
+                </section>
+                <section>
+                    <h2>For</h2>
+                    Igual ao de C/Java/C#/JavaScript, mas sem parênteses:
+                    <pre><code>
+for i := 0; i &lt; 10; i++ {
+    fmt.Println("i:", i)
+}
+                    </code></pre>
+                </section>
+                <section>
+                    <h2>Defer</h2>
+                    Ah, o Defer.
+                    Defer é um comando de fluxo de controle.
+                    Ele denota uma chamada de função que só irá rodar quando a função na qual está definido terminar seu processamento.
+                </section>
+                <section>
+                    Exemplo: abrir um arquivo para leitura
+                    <pre><code>
+arquivo, _ := os.OpenFile("meu_arquivo.txt")
+// ... fazendo coisas com o arquivo, e no final da função
+arquivo.Close()
+                    </code></pre>
+                    Fácil de esquecer o "arquivo.Close()" ali no final da função, especialmente se ela for longa.
+                </section>
+                <section>
+                    Conheça o defer:
+                    <pre><code>
+arquivo, err := os.OpenFile("meu_arquivo.txt")
+if err != nil {
+    // cuidar do erro
+}
+defer arquivo.Close()
+                    </code></pre>
+                    Quando esta função terminar, o Close() do arquivo será chamado automaticamente.
+                    O comando também empilha as funções, e as chama em ordem LIFO (Last In, First Out).
+                </section>
+            </section>
+            <section>
+                <section>
+                    <h2>Structs</h2>
+                    Structs são tipos que agregam diferentes conteúdos.
+                    <pre><code>
+type Usuario struct {
+    Nome string
+    Idade int
+}
+
+meuUsuario := Usuario{
+    Nome: "Foo",
+    Idade: 26,
+}
+fmt.Println(meuUsuario) // {Foo, 26}
+                    </code></pre>
+                </section>
+                <section>
+                    <h2>Tipos em structs</h2>
+                    Podemos colocar funções em tipos. Pense neles como métodos do objeto.
+                    <pre><code>
+// considere o Usuario do ultimo slide.
+func (u Usuario) PrintarNome() {
+    fmt.Println("Meu nome é", u.Nome, ". Prazer em conhecê-lo.")
+}
+
+meuUsuario := Usuario{
+    Nome: "Marcos"
+}
+meuUsuario.PrintarNome() // printa na tela: "Meu nome é Marcos. Prazer em conhecê-lo."
+                    </code></pre>
+                </section>
+            </section>
+            <section>
+                <h2>Mão na massa</h2>
+                Agora, iremos juntos desenvolver uma simples Wiki.
+                Outros conceitos serão explicados enquanto desenvolvemos a aplicação. Mas por enquanto, é tudo que precisamos saber.
+
+
+                Divirtam-se!
+            </section>
+        </div>
+    </div>
+    <script src="reveal.js/lib/js/head.min.js"></script>
+	<script src="reveal.js/js/reveal.js"></script>
+
+	<script>
+		// Full list of configuration options available at:
+		// https://github.com/hakimel/reveal.js#configuration
+		Reveal.initialize({
+			controls: true,
+			progress: true,
+			history: true,
+			center: true,
+			transition: 'slide', // none/fade/slide/convex/concave/zoom
+			// Optional reveal.js plugins
+			dependencies: [
+				{ src: 'reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+				{ src: 'reveal.js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+				{ src: 'reveal.js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+				{ src: 'reveal.js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+				{ src: 'reveal.js/plugin/zoom-js/zoom.js', async: true },
+				{ src: 'reveal.js/plugin/notes/notes.js', async: true }
+			]
+		});
+	</script>
+</body>
+</html>
