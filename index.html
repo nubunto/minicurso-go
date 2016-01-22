@@ -18,10 +18,34 @@
             </section>
             <section data-markdown>
                 <script type="text/template">
-                    Go é uma linguagem de programação de **tipagem estática**, **compilada** e **concorrente**.
+                    Go é uma linguagem de programação garbage-collected de **tipagem estática**, **compilada** e **concorrente**.
                     Foi desenvolvida pelo Google e liberada ao mundo open source em 2007.
-                    Desde então, mantém uma alta aceitação por parte dos programadores ao redor do mundo.
+
+
+                    Para alguns, Go é uma linguagem rápida, divertida e produtiva.
                 </script>
+            </section>
+            <section>
+                <h2>Porque Go?</h2>
+                <blockquote>
+                    The goals of the Go project were to eliminate the slowness and clumsiness of software development at Google,
+                    and thereby to make the process more productive and scalable.
+                    The language was designed by and for people who write—and read and debug and maintain—large software systems.
+                </blockquote>
+            </section>
+            <section>
+                <h2>Alguns motivos</h2>
+                <p class="fragment">Simplicidade</p>
+                <p class="fragment">Simplicidade</p>
+                <p class="fragment">Simplicidade!</p>
+
+                Go não é "The Ultimate Programming Language", nasceu com um objetivo: fazer longas bases de código mais simples
+                e programadores mais produtivos. Pra isso, sacrifica algumas coisas.
+            </section>
+            <section>
+                <blockquote>
+                    &ldquo;Less is exponentially more.&rdquo; - Rob Pike, um dos criadores da linguagem.
+                </blockquote>
             </section>
             <section>
                     <h2>Quem usa Go?</h2>
@@ -49,8 +73,6 @@
                     <span class="fragment">Badoo<span>
                     <span class="fragment">A China<span>
                     <span class="fragment">... <a href="http://github.com/golang/go/wiki/GoUsers">e a lista continua.</a><span>
-            </section>
-            <section>
             </section>
             <section>
                 <section>
@@ -127,7 +149,15 @@ func meuHandler(w http.ResponseWriter, r *http.Request) {
                 em um único arquivo.
                 Deixe este arquivo no servidor, e está feito o deploy.
                 Rollback?
-                Volte a versão antiga do binário. Sempre faça backup.
+                Volte a versão antiga do binário. Não há como evitar a falta de backups...
+
+                A maioria dos frameworks de Continuous Integration aceitam código Go.
+            </section>
+            <section>
+                <h2>Testes Unitários</h2>
+
+                A própria distribuição de Go vem com uma ferramenta de teste e benchmarks, para garantir o grau de certeza do código
+                e também uma ideia geral de quão bem ele vai rodar. É divertido e simples de fazer.
             </section>
             <section>
                 <h2>Se aprofundando na linguagem</h2>
@@ -166,7 +196,7 @@ func main() {
 package main
 
 import (
-    "fmt" // pacote da distribuição padrão
+    "fmt" // pacote da biblioteca padrão
 )
                 </code></pre>
             </section>
@@ -213,11 +243,14 @@ var numeroComplexoOdiadoNoEnsinoMedio complex128 = 2 + 5i // sim, números compl
 func Soma(a int, b int) int {
     return a + b
 }
+
+// se você inicializar a variável na declaração, pode omitir o tipo
+var myVar = "this is a var."
                     </code></pre>
                 </section>
                 <section>
                     <h2>Variáveis</h2>
-                    Variáveis podem ser declaradas com seu valor zerado (inicialização e declaração são a mesma coisa):
+                    Variáveis podem ser declaradas com seu valor zerado (nunca vai encontrar lixo do SO na variável):
                     <pre><code>
 var a int
 fmt.Println(a) // 0
@@ -229,6 +262,11 @@ fmt.Println(a) // 0
                     <pre><code>
 var a = 1
 fmt.Println(a) // 1
+
+func swap(a, b int) (int, int) {
+    return b, a
+}
+
                     </code></pre>
                 </section>
                 <section>
@@ -303,6 +341,38 @@ defer arquivo.Close()
                 </section>
             </section>
             <section>
+                <section>
+                    <h2>Funções</h2>
+                    Funções são... bem, funções.
+                    <pre><code>
+func HelloWorld() string {
+    return "hello, world"
+}
+fmt.Println(HelloWorld())
+                    </code></pre>
+                </section>
+                <section>
+                    <h2>São valores</h2>
+                    Funções são valores como todas as variáveis. Podem ser passadas, declaradas, atribuídas, etc.
+                    <pre><code>
+fn := func(a int) float64 {
+    return a * 2.0
+}
+fmt.Println(fn(5)) // 10.0
+                    </code></pre>
+                </section>
+                <section>
+                    <h2>Tipos</h2>
+                    Você pode declarar novos tipos. Pense no "typedef" de C, porém ele cria um tipo realmente novo.
+                    <pre><code>
+type Foo int
+
+var f Foo = Foo(5) // type cast de 5 para o tipo Foo
+fmt.Println(f) // 5
+
+                    </code></pre>
+                    Veremos o quanto isto é útil mais pra frente.
+                </section>
                 <section>
                     <h2>Structs</h2>
                     Structs são tipos que agregam diferentes conteúdos.
